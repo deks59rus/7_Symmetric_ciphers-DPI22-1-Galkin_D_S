@@ -8,6 +8,19 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
+def print_log(n):
+    """Вывод последних n строк из файла лога."""
+    try:
+        with open('log.txt', 'r', encoding='cp1251') as log_file:
+            lines = log_file.readlines()
+            # Выводим последние n строк
+            for line in lines[-n:]:
+                print(line.strip())
+    except FileNotFoundError:
+        print("Файл лога не найден.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
 def main():
     while True:
         # Ввод текста с клавиатуры
@@ -20,7 +33,8 @@ def main():
         print("Выберите метод шифрования:")
         print("1. Шифр Цезаря")
         print("2. Шифр Вернама")
-        choice = input("Введите номер метода (1 или 2): ")
+        print("3. Печать лога")
+        choice = input("Введите номер метода (1, 2 или 3): ")
 
         if choice == '1':
             shift = int(input("Введите сдвиг для шифра Цезаря (от 1 до 25): "))
@@ -46,8 +60,15 @@ def main():
             logging.info(f"Шифрование (Вернам): Входной текст: {plaintext}, Результат: {encrypted_vernam}")
             logging.info(f"Дешифрование (Вернам): Входной текст: {encrypted_vernam}, Результат: {decrypted_vernam}")
 
+        elif choice == '3':
+            try:
+                n = int(input("Введите количество последних строк для вывода из лога: "))
+                print_log(n)
+            except ValueError:
+                print("Пожалуйста, введите корректное целое число.")
+
         else:
-            print("Неверный выбор метода.")
+            print("Неверный выбор. Пожалуйста, выберите 1, 2 или 3.")
 
 if __name__ == "__main__":
     main()
